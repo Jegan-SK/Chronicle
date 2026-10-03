@@ -24,6 +24,10 @@ Open `index.html` in a modern browser. No build step or backend is required.
 - `style.css` — UI and responsive styling
 - `app.js` — application state, scoring, authentication, task management, analytics, locking, and calendar logic
 
+## Live URL 
+
+- https://chronicle-fawn.vercel.app/
+
 ## Data model
 
 Chronicle stores user data in the browser using `localStorage`. The app does not require a backend.
