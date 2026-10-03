@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Chronicle — a minimal personal consistency tracker." />
+  <title>Chronicle — Consistency Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="page-auth" class="page active">
+    <div class="auth-bg"><div class="auth-orb orb-1"></div><div class="auth-orb orb-2"></div></div>
+    <div class="auth-card">
+      <div class="auth-logo"><div class="brand-mark">◇</div><h1>Chronicle</h1><p>Your personal consistency system.</p></div>
+      <div id="form-login" class="auth-form active">
+        <div><h2>Welcome back.</h2><p class="auth-copy">Continue where you left off.</p></div>
+        <label>Username<input id="login-username" type="text" autocomplete="username" placeholder="Username" /></label>
+        <label>Password<input id="login-password" type="password" autocomplete="current-password" placeholder="Password" /></label>
+        <p id="login-error" class="form-error hidden"></p>
+        <button class="btn-primary" onclick="handleLogin()">Sign in</button>
+        <p class="form-switch">New here? <button class="link-btn" onclick="switchToRegister()">Create account</button></p>
+      </div>
+      <div id="form-register" class="auth-form">
+        <div><h2>Create your system.</h2><p class="auth-copy">Keep it simple. Keep it yours.</p></div>
+        <label>Username<input id="reg-username" type="text" autocomplete="username" placeholder="Choose a username" /></label>
+        <label>Password<input id="reg-password" type="password" autocomplete="new-password" placeholder="Choose a password" /></label>
+        <label>Confirm password<input id="reg-confirm" type="password" autocomplete="new-password" placeholder="Repeat your password" /></label>
+        <p id="reg-error" class="form-error hidden"></p>
+        <button class="btn-primary" onclick="handleRegister()">Create account</button>
+        <p class="form-switch">Already have an account? <button class="link-btn" onclick="switchToLogin()">Sign in</button></p>
+      </div>
+    </div>
+  </div>
+
+  <div id="page-home" class="page">
+    <header class="topbar">
+      <button class="brand" onclick="showHome()"><span>◇</span> Chronicle</button>
+      <nav class="nav-links"><button class="nav-link active" onclick="showHome()">Today</button><button class="nav-link" onclick="showGraph()">Growth</button><button class="nav-link" onclick="showWinterArc()">Winter Arc</button></nav>
+      <div class="top-actions"><button class="manage-btn" onclick="openTaskManager()">Manage</button><span class="avatar" id="user-avatar-icon">?</span><span id="display-username" class="username-label"></span></div>
+    </header>
+    <main class="main-content">
+      <section class="day-hero">
+        <div class="date-nav"><button class="nav-arrow" onclick="navigateDay(-1)">‹</button><button id="today-jump" class="today-jump hidden" onclick="goToday()">Today</button><div class="date-display"><span id="display-day-name"></span><strong id="display-date"></strong></div><button class="nav-arrow" onclick="navigateDay(1)">›</button></div>
+        <div class="score-area"><div class="score-line"><div><span class="eyebrow">DAILY SCORE</span><div class="score-number"><span id="daily-score-display">0</span><span class="score-percent">%</span></div></div><div class="score-status" id="score-status">Add scored tasks to begin</div></div><div class="score-progress-wrap"><div id="score-progress-bar" class="score-progress-bar"></div></div><div id="daily-total-display" class="score-points">No points yet</div></div>
+      </section>
+      <div id="empty-tasks-msg" class="empty-state hidden"><strong>Your system is empty.</strong><span>Add Daily Tasks, Varying Tasks or Rites to start tracking.</span><button onclick="openTaskManager()">Manage tasks</button></div>
+      <section id="section-daily" class="task-section hidden"><header class="section-header daily-header"><span class="section-dot"></span><span>Daily Tasks</span><span class="section-note">Every day</span></header><div id="list-daily" class="task-list"></div></section>
+      <section id="section-varying" class="task-section hidden"><header class="section-header varying-header"><span class="section-dot"></span><span>Varying Tasks</span><span id="varying-day-label" class="section-note"></span></header><div id="list-varying" class="task-list"></div></section>
+      <section id="section-rites" class="task-section hidden"><header class="section-header rites-header"><span class="section-dot"></span><span>Rites &amp; Rules</span><span class="section-note">Your rules</span></header><div id="list-rites" class="task-list"></div></section>
+      <section class="todo-section" id="section-todo"><header class="todo-header" onclick="toggleTodoCollapse()"><div><span class="todo-dot"></span><span>To-Do</span><span class="todo-badge" id="todo-badge">0</span><span class="not-scored">not scored</span></div><span id="todo-chevron">⌄</span></header><div id="todo-body" class="todo-body"><div class="todo-add-row"><input id="input-todo" class="todo-input" placeholder="Add something for today..." onkeydown="handleTodoKey(event)" /><button onclick="addTodoItem()">Add</button></div><div id="list-todo" class="todo-list"></div><p id="todo-empty-msg" class="todo-empty">Nothing here — add something above.</p></div></section>
+    </main>
+    <footer class="mobile-footer"><button onclick="handleLogout()">Logout</button><button onclick="showGraph()">Growth</button><button onclick="showWinterArc()">Winter Arc</button></footer>
+  </div>
+
+  <div id="page-graph" class="page"><header class="topbar"><button class="brand" onclick="showHome()"><span>◇</span> Chronicle</button><nav class="nav-links"><button class="nav-link" onclick="showHome()">Today</button><button class="nav-link active">Growth</button><button class="nav-link" onclick="showWinterArc()">Winter Arc</button></nav><div class="top-actions"><span class="avatar" id="graph-avatar-icon">?</span><span id="graph-username-label" class="username-label"></span></div></header><main class="growth-main"><div class="page-heading"><span class="eyebrow">LONG TERM</span><h1>Your Growth</h1><p>Consistency, measured day by day.</p></div><div class="stats-grid"><div><span>BEST SCORE</span><strong id="stat-best">—</strong></div><div><span>AVERAGE SCORE</span><strong id="stat-avg">—</strong></div><div><span>CURRENT STREAK</span><strong id="stat-streak">0 days</strong></div><div><span>PERFECT DAYS</span><strong id="stat-days">0 perfect</strong></div></div><section class="chart-panel"><div class="panel-heading"><div><span class="eyebrow">HISTORY</span><h2>Score over time</h2></div><span>0–100%</span></div><canvas id="consistency-chart"></canvas><p id="graph-empty-msg" class="empty-state">Complete your first scored day to start your graph.</p></section></main></div>
+
+  <div id="page-winter" class="page"><header class="topbar"><button class="brand" onclick="showHome()"><span>◇</span> Chronicle</button><nav class="nav-links"><button class="nav-link" onclick="showHome()">Today</button><button class="nav-link" onclick="showGraph()">Growth</button><button class="nav-link active">Winter Arc</button></nav><div class="top-actions"><span class="avatar" id="winter-avatar-icon">?</span><span id="winter-username-label" class="username-label"></span></div></header><main class="winter-main"><div class="page-heading winter-heading"><span class="eyebrow">92 DAYS</span><h1>Winter Arc</h1><p>Every perfect day leaves a mark.</p></div><div class="winter-month-nav"><button onclick="navigateWinterMonth(-1)">‹</button><strong id="winter-month-label"></strong><button onclick="navigateWinterMonth(1)">›</button></div><section class="calendar-panel"><div class="winter-cal-header"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div><div id="winter-cal-grid" class="winter-cal-grid"></div></section><div class="winter-legend"><span><i class="legend-perfect">✓</i> Perfect</span><span><i class="legend-incomplete">×</i> Incomplete</span><span><i class="legend-untracked"></i> Untracked</span></div></main></div>
+
+  <div id="modal-overlay" class="modal-overlay hidden" onclick="closeModalOverlay(event)"><div class="modal" onclick="event.stopPropagation()"><div class="modal-head"><div><span class="eyebrow">YOUR SYSTEM</span><h2>Manage Tasks</h2></div><button onclick="closeTaskManager()">×</button></div><div class="modal-tabs"><button id="tab-daily-btn" class="tab-btn active" onclick="switchTab('daily')">Daily</button><button id="tab-varying-btn" class="tab-btn" onclick="switchTab('varying')">Varying</button><button id="tab-rites-btn" class="tab-btn" onclick="switchTab('rites')">Rites</button></div>
+    <div id="tab-daily" class="tab-content active"><p>Repeats every day.</p><div class="add-task-row"><input id="input-daily" placeholder="Task name" onkeydown="handleTaskInputKey(event,'daily')" /><input id="points-daily" class="points-input" type="number" min="1" value="1" /><button onclick="addTask('daily')">Add</button></div><ul id="modal-list-daily"></ul></div>
+    <div id="tab-varying" class="tab-content"><p>Only appears on selected weekdays.</p><div class="day-chips" id="day-chips"><button class="day-chip" data-day="0" onclick="toggleDayChip(this)">Sun</button><button class="day-chip" data-day="1" onclick="toggleDayChip(this)">Mon</button><button class="day-chip" data-day="2" onclick="toggleDayChip(this)">Tue</button><button class="day-chip" data-day="3" onclick="toggleDayChip(this)">Wed</button><button class="day-chip" data-day="4" onclick="toggleDayChip(this)">Thu</button><button class="day-chip" data-day="5" onclick="toggleDayChip(this)">Fri</button><button class="day-chip" data-day="6" onclick="toggleDayChip(this)">Sat</button></div><div class="add-task-row"><input id="input-varying" placeholder="Task name" onkeydown="handleTaskInputKey(event,'varying')" /><input id="points-varying" class="points-input" type="number" min="1" value="1" /><button onclick="addTask('varying')">Add</button></div><ul id="modal-list-varying"></ul></div>
+    <div id="tab-rites" class="tab-content"><p>Rules and commitments you want to follow.</p><div class="add-task-row"><input id="input-rites" placeholder="Rite or rule" onkeydown="handleTaskInputKey(event,'rites')" /><input id="points-rites" class="points-input" type="number" min="1" value="1" /><button onclick="addTask('rites')">Add</button></div><ul id="modal-list-rites"></ul></div>
+  </div></div>
+  <script src="app.js"></script>
+</body>
+</html>
